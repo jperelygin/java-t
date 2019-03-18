@@ -105,27 +105,10 @@ public class Word {
             }
 
         } catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         } finally {
             if (connection != null) connection.disconnect();
         }
-    }
-
-    private String urlForSQLGenerator(){
-        String url;
-        String reversedProp;
-        String prop = System.getProperty("java.class.path");
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < prop.length(); i++){
-            if (prop.charAt(i) == '\\'){
-                sb.append("/");
-            } else {
-                sb.append(prop.charAt(i));
-            }
-        }
-        reversedProp = sb.toString();
-        url = "jdbc:sqlite:" + reversedProp + "/t.db";
-        return url;
     }
 
     public String getTranslation(){
@@ -140,8 +123,7 @@ public class Word {
     public String getNeededLanguage(){
         return this.neededLanguage;
     }
-
-    //Not working yet
+        
     public String connectSQL(){
         String os = osCheck();
 
@@ -149,14 +131,13 @@ public class Word {
         String dbUrl;
         try {
             Class.forName("org.sqlite.JDBC");
-            dbUrl = urlForSQLGenerator();
-            con = DriverManager.getConnection(dbUrl);
+            con = DriverManager.getConnection("jdbc:sqlite:./t.db");
 
             //del after tests.
             System.out.println("Connected to db");
 
         } catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         } finally {
             try {
                 if (con != null){
